@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import ForYouPage from './pages/ForYouPage';
+import UploadPage from './pages/UploadPage';
 
 function App() {
+  const [activePage, setActivePage] = useState('forYou');
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className="App flex flex-col h-screen overflow-hidden">
+      <div className="flex-grow pb-16 overflow-y-auto">
+        {activePage === 'forYou' ? (
+          <ForYouPage setActivePage={setActivePage} />
+        ) : (
+          <UploadPage setActivePage={setActivePage} />
+        )}
+      </div>
+      
+      <nav className="fixed bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4 flex justify-center space-x-10 z-50">
+        <button 
+          className={`px-4 py-2 rounded-full ${activePage === 'forYou' ? 'bg-white text-black' : ''}`}
+          onClick={() => setActivePage('forYou')}
         >
-          Learn React
-        </a>
-      </header>
+          For You
+        </button>
+        <button 
+          className={`px-4 py-2 rounded-full ${activePage === 'upload' ? 'bg-white text-black' : ''}`}
+          onClick={() => setActivePage('upload')}
+        >
+          Upload
+        </button>
+      </nav>
     </div>
   );
 }
 
-export default App;
+export default App; 

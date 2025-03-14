@@ -1,70 +1,92 @@
-# Getting Started with Create React App
+# Symposium
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Symposium is a TikTok-like content app for insightful and engaging content with a unique progressive depth feature.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Progressive Depth Content**: Each post has 3 levels - Hook, Main, and Full
+- **Intuitive Navigation**: Swipe left to go deeper into content, swipe up for the next post
+- **Mixed Media Support**: Both text and video content supported at each level
+- **Response System**: Users can respond to posts with text or video responses
+- **Citation Support**: Responses can include citations to reference sources
 
-### `npm start`
+## Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Prerequisites
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Node.js (v12 or higher)
+- npm or yarn
 
-### `npm test`
+### Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clone the repository
+```
+git clone https://github.com/yourusername/symposium.git
+cd symposium
+```
 
-### `npm run build`
+2. Install dependencies
+```
+npm install
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Set up Firebase
+   - Create a new Firebase project at [https://console.firebase.google.com/](https://console.firebase.google.com/)
+   - Enable Firestore and Storage services
+   - Update your Firebase configuration in `src/firebase.js`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. Start the development server
+```
+npm start
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Tech Stack
 
-### `npm run eject`
+- React (Create React App)
+- Firebase (Firestore and Storage)
+- Tailwind CSS
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Usage
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### For You Feed
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- The app opens in the "For You" feed by default
+- Swipe horizontally (left/right) to navigate through depth levels
+- Swipe vertically (up/down) to navigate between posts
+- At the "Full" level, you can view and add responses
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Creating Posts
 
-## Learn More
+1. Click on the "Upload" tab
+2. Follow the 3-step process to create your post:
+   - Hook: Create a short attention-grabbing hook (text or video)
+   - Main: Expand on your idea with more details
+   - Full: Add comprehensive content, sections, and references
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Project Structure
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+symposium/
+├── public/
+├── src/
+│   ├── components/          # UI Components
+│   ├── models/              # Data models
+│   ├── pages/               # Page components
+│   ├── services/            # Firebase services
+│   ├── App.js               # Main app component
+│   ├── firebase.js          # Firebase configuration
+│   └── index.js             # Entry point
+└── README.md
+```
 
-### Code Splitting
+## Future Enhancements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- User authentication and profiles
+- Content categorization and discovery
+- Search functionality
+- Bookmarking and collections
+- Enhanced analytics
 
-### Analyzing the Bundle Size
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is licensed under the MIT License - see the LICENSE file for details. 
