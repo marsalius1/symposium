@@ -21,7 +21,6 @@ const ForYouPage = ({ setActivePage }) => {
           setFeedContent(content);
         } else {
           // TODO: Handle empty content (maybe show demo content)
-          console.log('No content available');
         }
       } catch (error) {
         console.error('Error loading feed content:', error);
@@ -150,14 +149,7 @@ const ForYouPage = ({ setActivePage }) => {
   }
 
   const currentContent = feedContent[currentContentIndex];
-  console.log('Current content:', currentContent);
-  console.log('feedContent:', feedContent);
   
-  // Debug logging to check content
-  console.log('Current content index:', currentContentIndex);
-  console.log('Feed content length:', feedContent.length);
-  console.log('Current content:', currentContent);
-
   return (
     <div 
       className="h-full bg-black text-white"

@@ -100,7 +100,6 @@ export const addResponse = async (contentId, responseData) => {
     
     const contentRef = doc(db, 'content', contentId);
     const contentDoc = await getDoc(contentRef);
-    console.log('Content document:', contentDoc.data());
     
     if (!contentDoc.exists()) {
       throw new Error('Content not found');
