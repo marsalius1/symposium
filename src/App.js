@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ForYouPage from './pages/ForYouPage';
-import UploadPage from './pages/UploadPage';
+import UploadPage from './pages/UploadPage3';
 
 function App() {
   const [activePage, setActivePage] = useState('forYou');
