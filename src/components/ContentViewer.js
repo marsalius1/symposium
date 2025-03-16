@@ -148,7 +148,7 @@ const ContentViewer = ({ content, depthLevel }) => {
       <div className="relative h-screen flex items-center justify-center bg-black">
         <video 
           src={videoUrl}
-          className="max-h-screen max-w-full"
+          className="max-h-screen max-w-full -mt-16"
           autoPlay 
           loop 
           playsInline

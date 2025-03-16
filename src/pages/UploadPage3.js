@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ResponsiveUploadForm = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [contentType, setContentType] = useState('text');
   const [isMobile, setIsMobile] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   const steps = ['Hook', 'Main', 'Full'];
   
@@ -644,36 +644,10 @@ const ResponsiveUploadForm = () => {
     <div 
       className="min-h-screen w-full flex flex-col" 
       style={{ 
-        background: colors.gradient,
         color: colors.text,
         fontFamily: "'Inter', system-ui, sans-serif"
       }}
     >
-      {/* Header with custom styling */}
-      <header className="py-5 px-6 flex justify-between items-center border-b" style={{ borderColor: colors.border }}>
-        <div className="text-xl font-semibold tracking-tight flex items-center" style={{ color: colors.accent2 }}>
-          <svg viewBox="0 0 24 24" className="w-7 h-7 mr-2" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" 
-                  stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M9.5 9C9.5 8.17157 10.1716 7.5 11 7.5H13C13.8284 7.5 14.5 8.17157 14.5 9C14.5 9.82843 13.8284 10.5 13 10.5H11C10.1716 10.5 9.5 11.1716 9.5 12C9.5 12.8284 10.1716 13.5 11 13.5H13C13.8284 13.5 14.5 14.1716 14.5 15C14.5 15.8284 13.8284 16.5 13 16.5H11C10.1716 16.5 9.5 15.8284 9.5 15" 
-                  stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M12 7.5V6" stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M12 18V16.5" stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          Symposium
-        </div>
-        <button 
-          className="text-sm px-4 py-2 rounded-full transition-colors"
-          style={{ 
-            background: colors.accent1,
-            color: "#1A1A2E", 
-            fontWeight: 500
-          }}
-        >
-          Close
-        </button>
-      </header>
-      
       {/* Progress indicator with custom styling */}
       <div className="px-8 pt-10">
         <div className="flex justify-center items-center mb-4">
@@ -744,40 +718,12 @@ const ResponsiveUploadForm = () => {
     <div 
       className="min-h-screen w-full flex flex-col" 
       style={{ 
-        background: colors.gradient,
         color: colors.text,
         fontFamily: "'Inter', system-ui, sans-serif",
         position: 'relative',
         overflow: 'hidden'
       }}
     >
-      {/* Mobile Header */}
-      <header className="py-4 px-4 flex justify-between items-center border-b relative z-20" style={{ borderColor: colors.border }}>
-        <div className="flex items-center">
-          <div className="text-lg font-semibold tracking-tight flex items-center" style={{ color: colors.accent2 }}>
-            <svg viewBox="0 0 24 24" className="w-6 h-6 mr-2" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" 
-                    stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M9.5 9C9.5 8.17157 10.1716 7.5 11 7.5H13C13.8284 7.5 14.5 8.17157 14.5 9C14.5 9.82843 13.8284 10.5 13 10.5H11C10.1716 10.5 9.5 11.1716 9.5 12C9.5 12.8284 10.1716 13.5 11 13.5H13C13.8284 13.5 14.5 14.1716 14.5 15C14.5 15.8284 13.8284 16.5 13 16.5H11C10.1716 16.5 9.5 15.8284 9.5 15" 
-                    stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 7.5V6" stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 18V16.5" stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Symposium
-          </div>
-        </div>
-        <button 
-          className="text-sm px-3 py-1.5 rounded-full"
-          style={{ 
-            background: colors.accent1,
-            color: "#1A1A2E"
-          }}
-        >
-          Close
-        </button>
-      </header>
-      
-      
       {/* Mobile Content */}
       <div 
         className="flex-1 px-4 pt-5 pb-20 overflow-hidden"
@@ -857,4 +803,10 @@ const ResponsiveUploadForm = () => {
   return isMobile ? <MobileLayout /> : <DesktopLayout />;
 };
 
-export default ResponsiveUploadForm;
+const UploadPage = () => {
+  const navigate = useNavigate();
+  
+  return <ResponsiveUploadForm />;
+};
+
+export default UploadPage;

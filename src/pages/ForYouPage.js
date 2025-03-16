@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getFeedContent, getContentById } from '../services/contentService';
 import ContentViewer from '../components/ContentViewer';
 import ResponseForm from '../components/ResponseForm';
 
-const ForYouPage = ({ setActivePage }) => {
+const ForYouPage = () => {
+  const navigate = useNavigate();
   const [feedContent, setFeedContent] = useState([]);
   const [currentContentIndex, setCurrentContentIndex] = useState(0);
   const [currentDepthLevel, setCurrentDepthLevel] = useState('hook');
@@ -139,7 +141,7 @@ const ForYouPage = ({ setActivePage }) => {
           <p className="mb-6">Be the first to share something insightful!</p>
           <button 
             className="bg-white text-black px-6 py-3 rounded-full font-semibold"
-            onClick={() => setActivePage('upload')}
+            onClick={() => navigate('/upload')}
           >
             Create Post
           </button>
@@ -156,13 +158,13 @@ const ForYouPage = ({ setActivePage }) => {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Depth level indicator */}
-      <div className="absolute top-4 right-4 z-40 bg-black bg-opacity-50 px-3 py-1 rounded-full text-sm">
-        {currentDepthLevel.charAt(0).toUpperCase() + currentDepthLevel.slice(1)}
-      </div>
+      {/* Depth level indicator - moved inside content area */}
       
       {/* Content area */}
-      <div className="h-full overflow-hidden">
+      <div className="h-full overflow-hidden relative">
+        <div className="absolute top-4 right-4 z-40 bg-black bg-opacity-50 px-3 py-1 rounded-full text-sm">
+          {currentDepthLevel.charAt(0).toUpperCase() + currentDepthLevel.slice(1)}
+        </div>
         <ContentViewer 
           content={currentContent} 
           depthLevel={currentDepthLevel}
