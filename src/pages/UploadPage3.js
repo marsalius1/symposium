@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 const ResponsiveUploadForm = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [contentType, setContentType] = useState('text');
   const [isMobile, setIsMobile] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [animationDirection, setAnimationDirection] = useState('forward');
-  const [showStepAnimation, setShowStepAnimation] = useState(false);
   
   const steps = ['Hook', 'Main', 'Full'];
   
@@ -33,29 +31,13 @@ const ResponsiveUploadForm = () => {
   
   const handleNext = () => {
     if (activeStep < steps.length - 1) {
-      setAnimationDirection('forward');
-      setShowStepAnimation(true);
-      
-      setTimeout(() => {
-        setActiveStep((prevStep) => prevStep + 1);
-        setTimeout(() => {
-          setShowStepAnimation(false);
-        }, 300);
-      }, 300);
+      setActiveStep(activeStep + 1);
     }
   };
   
   const handleBack = () => {
     if (activeStep > 0) {
-      setAnimationDirection('backward');
-      setShowStepAnimation(true);
-      
-      setTimeout(() => {
-        setActiveStep((prevStep) => prevStep - 1);
-        setTimeout(() => {
-          setShowStepAnimation(false);
-        }, 300);
-      }, 300);
+      setActiveStep(activeStep - 1);
     }
   };
   
@@ -71,81 +53,17 @@ const ResponsiveUploadForm = () => {
     border: "rgba(255, 255, 255, 0.12)"
   };
 
-  // Desktop layout component
-  const DesktopLayout = () => (
-    <div 
-      className="min-h-screen w-full flex flex-col" 
-      style={{ 
-        background: colors.gradient,
-        color: colors.text,
-        fontFamily: "'Inter', system-ui, sans-serif"
-      }}
-    >
-      {/* Header with custom styling */}
-      <header className="py-5 px-6 flex justify-between items-center border-b" style={{ borderColor: colors.border }}>
-        <div className="text-xl font-semibold tracking-tight flex items-center" style={{ color: colors.accent2 }}>
-          <svg viewBox="0 0 24 24" className="w-7 h-7 mr-2" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" 
-                  stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M9.5 9C9.5 8.17157 10.1716 7.5 11 7.5H13C13.8284 7.5 14.5 8.17157 14.5 9C14.5 9.82843 13.8284 10.5 13 10.5H11C10.1716 10.5 9.5 11.1716 9.5 12C9.5 12.8284 10.1716 13.5 11 13.5H13C13.8284 13.5 14.5 14.1716 14.5 15C14.5 15.8284 13.8284 16.5 13 16.5H11C10.1716 16.5 9.5 15.8284 9.5 15" 
-                  stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M12 7.5V6" stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M12 18V16.5" stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          Symposium
-        </div>
-        <button 
-          className="text-sm px-4 py-2 rounded-full transition-colors"
-          style={{ 
-            background: colors.accent1,
-            color: "#1A1A2E", 
-            fontWeight: 500
-          }}
-        >
-          Close
-        </button>
-      </header>
-      
-      {/* Progress indicator with custom styling */}
-      <div className="px-8 pt-10">
-        <div className="flex justify-center items-center mb-4">
-          {steps.map((step, index) => (
-            <div key={step} className="flex flex-col items-center mx-2">
-              <div 
-                className="w-3 h-3 rounded-full"
-                style={{ 
-                  background: index === activeStep ? colors.accent1 : colors.surface2,
-                  boxShadow: index === activeStep ? `0 0 6px ${colors.accent1}` : "none",
-                  transition: "all 0.3s ease"
-                }}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-      
-      {/* Content area with animation */}
-      <div className="flex-1 px-6 py-4 overflow-y-auto">
-        {/* Step Title and Recommendation */}
-        <div className="max-w-2xl mx-auto text-center mb-4">
-          <h2 className="text-2xl font-bold tracking-tight">
-            {steps[activeStep]}
-          </h2>
-          <p style={{ color: colors.textSecondary }} className="mt-1">
-            Recommendation: {getStepRecommendation()}
-          </p>
-        </div>
-
-        <div 
-          className={`max-w-2xl mx-auto rounded-xl p-6 backdrop-blur-sm ${showStepAnimation ? 'opacity-0' : 'opacity-100'}`}
+  // Memoize the step content to improve performance
+  const currentStepContent = useMemo(() => {
+    return {
+      desktop: (
+        <div key={`desktop-step-${activeStep}`} className="max-w-2xl mx-auto rounded-xl p-6 backdrop-blur-sm"
           style={{ 
             background: "rgba(255, 255, 255, 0.03)",
             borderLeft: `3px solid ${colors.accent1}`,
-            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-            transition: "opacity 0.3s ease"
+            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)"
           }}
         >
-          {/* Form Content... */}
           {/* Basic Information (only on first step) */}
           {activeStep === 0 && (
             <div 
@@ -259,12 +177,11 @@ const ResponsiveUploadForm = () => {
                     <textarea 
                       rows="5" 
                       placeholder="Write your attention-grabbing introduction here..."
-                      className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2"
+                      className="w-full px-3 py-2 rounded-md focus:outline-none"
                       style={{ 
                         background: colors.surface2,
                         border: `1px solid ${colors.border}`,
-                        color: colors.text,
-                        focusRing: colors.accent1
+                        color: colors.text
                       }}
                     ></textarea>
                   </div>
@@ -279,7 +196,7 @@ const ResponsiveUploadForm = () => {
                       <textarea 
                         rows="8" 
                         placeholder="Elaborate on your key points here..."
-                        className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2"
+                        className="w-full px-3 py-2 rounded-md focus:outline-none"
                         style={{ 
                           background: colors.surface2,
                           border: `1px solid ${colors.border}`,
@@ -294,7 +211,7 @@ const ResponsiveUploadForm = () => {
                         <input 
                           type="text" 
                           placeholder="Key point 1" 
-                          className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2"
+                          className="w-full px-3 py-2 rounded-md focus:outline-none"
                           style={{ 
                             background: colors.surface2,
                             border: `1px solid ${colors.border}`,
@@ -304,7 +221,7 @@ const ResponsiveUploadForm = () => {
                         <input 
                           type="text" 
                           placeholder="Key point 2" 
-                          className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2"
+                          className="w-full px-3 py-2 rounded-md focus:outline-none"
                           style={{ 
                             background: colors.surface2,
                             border: `1px solid ${colors.border}`,
@@ -331,7 +248,7 @@ const ResponsiveUploadForm = () => {
                       <textarea 
                         rows="8" 
                         placeholder="Provide your comprehensive analysis here..."
-                        className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2"
+                        className="w-full px-3 py-2 rounded-md focus:outline-none"
                         style={{ 
                           background: colors.surface2,
                           border: `1px solid ${colors.border}`,
@@ -347,7 +264,7 @@ const ResponsiveUploadForm = () => {
                           <input 
                             type="text" 
                             placeholder="Reference text" 
-                            className="flex-1 px-3 py-2 rounded-md focus:outline-none focus:ring-2"
+                            className="flex-1 px-3 py-2 rounded-md focus:outline-none"
                             style={{ 
                               background: colors.surface2,
                               border: `1px solid ${colors.border}`,
@@ -357,7 +274,7 @@ const ResponsiveUploadForm = () => {
                           <input 
                             type="text" 
                             placeholder="URL (optional)" 
-                            className="flex-1 px-3 py-2 rounded-md focus:outline-none focus:ring-2"
+                            className="flex-1 px-3 py-2 rounded-md focus:outline-none"
                             style={{ 
                               background: colors.surface2,
                               border: `1px solid ${colors.border}`,
@@ -413,7 +330,7 @@ const ResponsiveUploadForm = () => {
                   <textarea 
                     rows="3" 
                     placeholder="Add a caption to your video..."
-                    className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2"
+                    className="w-full px-3 py-2 rounded-md focus:outline-none"
                     style={{ 
                       background: colors.surface2,
                       border: `1px solid ${colors.border}`,
@@ -425,196 +342,13 @@ const ResponsiveUploadForm = () => {
             )}
           </div>
         </div>
-      </div>
-      
-      {/* Footer / Navigation */}
-      <div className="px-8 py-5 border-t" style={{ borderColor: colors.border }}>
-        <div className="max-w-2xl mx-auto flex justify-between">
-          <button 
-            onClick={handleBack}
-            disabled={activeStep === 0}
-            className="px-4 py-2 rounded-md transition-colors"
-            style={{ 
-              background: activeStep === 0 ? 'rgba(255, 255, 255, 0.05)' : colors.surface1,
-              color: activeStep === 0 ? 'rgba(255, 255, 255, 0.3)' : colors.text,
-              cursor: activeStep === 0 ? 'not-allowed' : 'pointer'
-            }}
-          >
-            Back
-          </button>
-          
-          <button 
-            onClick={handleNext}
-            className="px-4 py-2 rounded-md transition-colors"
-            style={{ 
-              background: activeStep === steps.length - 1 ? colors.accent2 : colors.accent1,
-              color: "#1A1A2E",
-              fontWeight: 500
-            }}
-          >
-            {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-  
-  // Mobile layout component with innovative card-stack UI
-  const MobileLayout = () => (
-    <div 
-      className="min-h-screen w-full flex flex-col" 
-      style={{ 
-        background: colors.gradient,
-        color: colors.text,
-        fontFamily: "'Inter', system-ui, sans-serif",
-        position: 'relative',
-        overflow: 'hidden'
-      }}
-    >
-      {/* Mobile Header */}
-      <header className="py-4 px-4 flex justify-between items-center border-b relative z-20" style={{ borderColor: colors.border }}>
-        <div className="flex items-center">
-          <button 
-            className="mr-3 p-1 rounded-full" 
-            style={{ background: colors.surface1 }}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <div className="text-lg font-semibold tracking-tight flex items-center" style={{ color: colors.accent2 }}>
-            <svg viewBox="0 0 24 24" className="w-6 h-6 mr-2" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" 
-                    stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M9.5 9C9.5 8.17157 10.1716 7.5 11 7.5H13C13.8284 7.5 14.5 8.17157 14.5 9C14.5 9.82843 13.8284 10.5 13 10.5H11C10.1716 10.5 9.5 11.1716 9.5 12C9.5 12.8284 10.1716 13.5 11 13.5H13C13.8284 13.5 14.5 14.1716 14.5 15C14.5 15.8284 13.8284 16.5 13 16.5H11C10.1716 16.5 9.5 15.8284 9.5 15" 
-                    stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 7.5V6" stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 18V16.5" stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Symposium
-          </div>
-        </div>
-        <button 
-          className="text-sm px-3 py-1.5 rounded-full"
-          style={{ 
-            background: colors.accent1,
-            color: "#1A1A2E"
-          }}
-        >
-          Close
-        </button>
-      </header>
-      
-      {/* Mobile Sliding Menu */}
-      <div 
-        className="fixed top-0 left-0 h-full w-64 z-50 pt-16 transform transition-transform duration-300 ease-in-out"
-        style={{
-          background: "linear-gradient(180deg, rgba(42, 27, 61, 0.95) 0%, rgba(26, 58, 99, 0.95) 100%)",
-          backdropFilter: "blur(10px)",
-          borderRight: `1px solid ${colors.border}`,
-          transform: isMenuOpen ? 'translateX(0)' : 'translateX(-100%)'
-        }}
-      >
-        <div className="px-4 py-2 mb-4">
-          <div className="text-sm font-medium mb-2" style={{ color: colors.textSecondary }}>NAVIGATION</div>
-          <div className="flex flex-col space-y-2">
-            <button 
-              className="flex items-center px-3 py-2 rounded-lg text-left"
-              style={{ background: colors.surface1 }}
-            >
-              <svg className="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              New Post
-            </button>
-            <button className="flex items-center px-3 py-2 rounded-lg text-left">
-              <svg className="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-              </svg>
-              My Posts
-            </button>
-            <button className="flex items-center px-3 py-2 rounded-lg text-left">
-              <svg className="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-              </svg>
-              Notifications
-            </button>
-          </div>
-        </div>
-        
-        <div className="px-4 py-2">
-          <div className="text-sm font-medium mb-2" style={{ color: colors.textSecondary }}>YOUR DEPTH PROGRESS</div>
-          <div className="p-3 rounded-lg" style={{ background: colors.surface1 }}>
-            <div className="flex justify-between items-center mb-1">
-              <span className="text-sm">Physics</span>
-              <span className="text-sm" style={{ color: colors.accent2 }}>Lvl 4</span>
-            </div>
-            <div className="h-1.5 w-full rounded-full overflow-hidden" style={{ background: colors.surface2 }}>
-              <div className="h-full rounded-full" style={{ width: '65%', background: colors.accent2 }}></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      {/* Dark overlay when menu is open */}
-      {isMenuOpen && (
-        <div 
-          className="fixed inset-0 z-40 bg-black bg-opacity-50"
-          onClick={() => setIsMenuOpen(false)}
-        ></div>
-      )}
-      
-      {/* Mobile Progress Steps */}
-      <div className="relative z-10">
-        <div className="flex items-center justify-center mt-8">
-          {steps.map((step, index) => (
-            <div
-              key={step}
-              className="flex flex-col items-center mx-2"
-            >
-              <div
-                className="w-3 h-3 rounded-full"
-                style={{
-                  background: index === activeStep ? colors.accent1 : colors.surface2,
-                  boxShadow: index === activeStep ? `0 0 6px ${colors.accent1}` : "none",
-                  transition: "all 0.3s ease"
-                }}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-      
-      
-      {/* Mobile Content with Card Stack Interface */}
-      <div 
-        className="flex-1 px-4 pt-5 pb-20 overflow-hidden"
-        style={{ 
-          position: 'relative',
-          perspective: '1000px'
-        }}
-      >
-        {/* Step Title and Recommendation */}
-        <div className="max-w-2xl mx-auto text-center mb-4">
-          <h2 className="text-2xl font-bold tracking-tight">
-            {steps[activeStep]}
-          </h2>
-          <p style={{ color: colors.textSecondary }} className="mt-2">
-            Recommendation: {getStepRecommendation()}
-          </p>
-        </div>
-
-        <div 
-          className={`w-full rounded-xl p-4 backdrop-blur-sm ${showStepAnimation ? 'opacity-0' : 'opacity-100'}`}
+      ),
+      mobile: (
+        <div key={`mobile-step-${activeStep}`} className="w-full rounded-xl p-4 backdrop-blur-sm"
           style={{ 
             background: "rgba(255, 255, 255, 0.05)",
             borderTop: `2px solid ${colors.accent1}`,
-            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.2)",
-            transition: "all 0.4s ease",
-            transform: showStepAnimation 
-              ? (animationDirection === 'forward' ? 'translateY(-10%) scale(0.95)' : 'translateY(10%) scale(0.95)')
-              : 'translateY(0) scale(1)',
+            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.2)"
           }}
         >
           {/* Mobile Form Content */}
@@ -737,7 +471,7 @@ const ResponsiveUploadForm = () => {
                     <textarea 
                       rows="4" 
                       placeholder="Write your attention-grabbing introduction here..."
-                      className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 text-base"
+                      className="w-full px-3 py-2 rounded-md focus:outline-none text-base"
                       style={{ 
                         background: colors.surface2,
                         border: `1px solid ${colors.border}`,
@@ -756,7 +490,7 @@ const ResponsiveUploadForm = () => {
                       <textarea 
                         rows="6" 
                         placeholder="Elaborate on your key points here..."
-                        className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 text-base"
+                        className="w-full px-3 py-2 rounded-md focus:outline-none text-base"
                         style={{ 
                           background: colors.surface2,
                           border: `1px solid ${colors.border}`,
@@ -771,7 +505,7 @@ const ResponsiveUploadForm = () => {
                         <input 
                           type="text" 
                           placeholder="Key point 1" 
-                          className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 text-base"
+                          className="w-full px-3 py-2 rounded-md focus:outline-none text-base"
                           style={{ 
                             background: colors.surface2,
                             border: `1px solid ${colors.border}`,
@@ -781,7 +515,7 @@ const ResponsiveUploadForm = () => {
                         <input 
                           type="text" 
                           placeholder="Key point 2" 
-                          className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 text-base"
+                          className="w-full px-3 py-2 rounded-md focus:outline-none text-base"
                           style={{ 
                             background: colors.surface2,
                             border: `1px solid ${colors.border}`,
@@ -808,7 +542,7 @@ const ResponsiveUploadForm = () => {
                       <textarea 
                         rows="6" 
                         placeholder="Provide your comprehensive analysis here..."
-                        className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 text-base"
+                        className="w-full px-3 py-2 rounded-md focus:outline-none text-base"
                         style={{ 
                           background: colors.surface2,
                           border: `1px solid ${colors.border}`,
@@ -824,7 +558,7 @@ const ResponsiveUploadForm = () => {
                           <input 
                             type="text" 
                             placeholder="Reference text" 
-                            className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 text-base"
+                            className="w-full px-3 py-2 rounded-md focus:outline-none text-base"
                             style={{ 
                               background: colors.surface2,
                               border: `1px solid ${colors.border}`,
@@ -834,7 +568,7 @@ const ResponsiveUploadForm = () => {
                           <input 
                             type="text" 
                             placeholder="URL (optional)" 
-                            className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 text-base"
+                            className="w-full px-3 py-2 rounded-md focus:outline-none text-base"
                             style={{ 
                               background: colors.surface2,
                               border: `1px solid ${colors.border}`,
@@ -889,7 +623,7 @@ const ResponsiveUploadForm = () => {
                   <textarea 
                     rows="3" 
                     placeholder="Add a caption to your video..."
-                    className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 text-base"
+                    className="w-full px-3 py-2 rounded-md focus:outline-none text-base"
                     style={{ 
                       background: colors.surface2,
                       border: `1px solid ${colors.border}`,
@@ -901,6 +635,168 @@ const ResponsiveUploadForm = () => {
             )}
           </div>
         </div>
+      )
+    };
+  }, [activeStep, contentType, colors]);
+
+  // Desktop layout component
+  const DesktopLayout = () => (
+    <div 
+      className="min-h-screen w-full flex flex-col" 
+      style={{ 
+        background: colors.gradient,
+        color: colors.text,
+        fontFamily: "'Inter', system-ui, sans-serif"
+      }}
+    >
+      {/* Header with custom styling */}
+      <header className="py-5 px-6 flex justify-between items-center border-b" style={{ borderColor: colors.border }}>
+        <div className="text-xl font-semibold tracking-tight flex items-center" style={{ color: colors.accent2 }}>
+          <svg viewBox="0 0 24 24" className="w-7 h-7 mr-2" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" 
+                  stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M9.5 9C9.5 8.17157 10.1716 7.5 11 7.5H13C13.8284 7.5 14.5 8.17157 14.5 9C14.5 9.82843 13.8284 10.5 13 10.5H11C10.1716 10.5 9.5 11.1716 9.5 12C9.5 12.8284 10.1716 13.5 11 13.5H13C13.8284 13.5 14.5 14.1716 14.5 15C14.5 15.8284 13.8284 16.5 13 16.5H11C10.1716 16.5 9.5 15.8284 9.5 15" 
+                  stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M12 7.5V6" stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M12 18V16.5" stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Symposium
+        </div>
+        <button 
+          className="text-sm px-4 py-2 rounded-full transition-colors"
+          style={{ 
+            background: colors.accent1,
+            color: "#1A1A2E", 
+            fontWeight: 500
+          }}
+        >
+          Close
+        </button>
+      </header>
+      
+      {/* Progress indicator with custom styling */}
+      <div className="px-8 pt-10">
+        <div className="flex justify-center items-center mb-4">
+          {steps.map((step, index) => (
+            <div key={step} className="flex flex-col items-center mx-2">
+              <div 
+                className="w-3 h-3 rounded-full"
+                style={{ 
+                  background: index === activeStep ? colors.accent1 : colors.surface2,
+                  boxShadow: index === activeStep ? `0 0 6px ${colors.accent1}` : "none",
+                  transition: "all 0.3s ease"
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      {/* Content area */}
+      <div className="flex-1 px-6 py-4 overflow-y-auto">
+        {/* Step Title and Recommendation */}
+        <div className="max-w-2xl mx-auto text-center mb-4">
+          <h2 className="text-2xl font-bold tracking-tight">
+            {steps[activeStep]}
+          </h2>
+          <p style={{ color: colors.textSecondary }} className="mt-1">
+            Recommendation: {getStepRecommendation()}
+          </p>
+        </div>
+
+        {currentStepContent.desktop}
+      </div>
+      
+      {/* Footer / Navigation */}
+      <div className="px-8 py-5 border-t" style={{ borderColor: colors.border }}>
+        <div className="max-w-2xl mx-auto flex justify-between">
+          <button 
+            onClick={handleBack}
+            disabled={activeStep === 0}
+            className="px-4 py-2 rounded-md transition-colors"
+            style={{ 
+              background: activeStep === 0 ? 'rgba(255, 255, 255, 0.05)' : colors.surface1,
+              color: activeStep === 0 ? 'rgba(255, 255, 255, 0.3)' : colors.text,
+              cursor: activeStep === 0 ? 'not-allowed' : 'pointer'
+            }}
+          >
+            Back
+          </button>
+          
+          <button 
+            onClick={handleNext}
+            className="px-4 py-2 rounded-md transition-colors"
+            style={{ 
+              background: activeStep === steps.length - 1 ? colors.accent2 : colors.accent1,
+              color: "#1A1A2E",
+              fontWeight: 500
+            }}
+          >
+            {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+  
+  // Mobile layout component with innovative card-stack UI
+  const MobileLayout = () => (
+    <div 
+      className="min-h-screen w-full flex flex-col" 
+      style={{ 
+        background: colors.gradient,
+        color: colors.text,
+        fontFamily: "'Inter', system-ui, sans-serif",
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+    >
+      {/* Mobile Header */}
+      <header className="py-4 px-4 flex justify-between items-center border-b relative z-20" style={{ borderColor: colors.border }}>
+        <div className="flex items-center">
+          <div className="text-lg font-semibold tracking-tight flex items-center" style={{ color: colors.accent2 }}>
+            <svg viewBox="0 0 24 24" className="w-6 h-6 mr-2" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" 
+                    stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M9.5 9C9.5 8.17157 10.1716 7.5 11 7.5H13C13.8284 7.5 14.5 8.17157 14.5 9C14.5 9.82843 13.8284 10.5 13 10.5H11C10.1716 10.5 9.5 11.1716 9.5 12C9.5 12.8284 10.1716 13.5 11 13.5H13C13.8284 13.5 14.5 14.1716 14.5 15C14.5 15.8284 13.8284 16.5 13 16.5H11C10.1716 16.5 9.5 15.8284 9.5 15" 
+                    stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 7.5V6" stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 18V16.5" stroke={colors.accent2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            Symposium
+          </div>
+        </div>
+        <button 
+          className="text-sm px-3 py-1.5 rounded-full"
+          style={{ 
+            background: colors.accent1,
+            color: "#1A1A2E"
+          }}
+        >
+          Close
+        </button>
+      </header>
+      
+      
+      {/* Mobile Content */}
+      <div 
+        className="flex-1 px-4 pt-5 pb-20 overflow-hidden"
+        style={{ 
+          position: 'relative',
+          perspective: '1000px'
+        }}
+      >
+        {/* Step Title and Recommendation */}
+        <div className="max-w-2xl mx-auto text-center mb-4">
+          <h2 className="text-2xl font-bold tracking-tight">
+            {steps[activeStep]}
+          </h2>
+          <p style={{ color: colors.textSecondary }} className="mt-2">
+            Recommendation: {getStepRecommendation()}
+          </p>
+        </div>
+
+        {currentStepContent.mobile}
       </div>
       
       {/* Mobile Navigation */}
