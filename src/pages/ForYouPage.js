@@ -202,11 +202,6 @@ const ForYouPage = () => {
           />
         </div>
       )}
-      
-      {/* Swipe instructions - shown briefly */}
-      <div className="absolute bottom-20 left-4 text-gray-400 text-xs">
-        Swipe horizontally to change depth, vertically for next post
-      </div>
     </div>
   );
 };

@@ -150,7 +150,6 @@ const ContentViewer = ({ content, depthLevel }) => {
           src={videoUrl}
           className="max-h-screen max-w-full -mt-16"
           autoPlay 
-          loop 
           playsInline
           muted={muted}
           controls={depthLevel === 'full'}
@@ -158,7 +157,7 @@ const ContentViewer = ({ content, depthLevel }) => {
         
         {depthLevel === 'hook' && (
           <button 
-            className="absolute bottom-20 right-6 bg-white bg-opacity-20 p-3 rounded-full"
+            className="absolute bottom-[7rem] right-6 bg-white bg-opacity-20 p-3 rounded-full"
             onClick={() => setMuted(!muted)}
           >
             {muted ? (
