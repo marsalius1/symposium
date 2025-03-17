@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import ForYouPage from './pages/ForYouPage';
-import UploadPage from './pages/UploadPage3';
+import UploadPage from './pages/UploadPage';
 
 function App() {
   const location = useLocation();
