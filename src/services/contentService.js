@@ -1,5 +1,5 @@
 import { collection, addDoc, getDoc, getDocs, doc, updateDoc, query, orderBy, limit, setDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { db, storage } from '../firebase';
 import { createUniqueId } from '../models/contentModel';
 
@@ -41,13 +41,36 @@ export const getContentById = async (contentId) => {
 };
 
 // Upload a video file to Firebase Storage
-export const uploadVideo = async (file) => {
+export const uploadVideo = async (file, onProgress) => {
   try {
     const fileId = createUniqueId();
     const fileRef = ref(storage, `videos/${fileId}`);
-    await uploadBytes(fileRef, file);
-    const downloadURL = await getDownloadURL(fileRef);
-    return downloadURL;
+    
+    if (onProgress) {
+      const uploadTask = uploadBytesResumable(fileRef, file);
+      
+      // Set up progress monitoring
+      uploadTask.on('state_changed', 
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          onProgress(progress);
+        },
+        (error) => {
+          console.error("Upload error:", error);
+          throw error;
+        }
+      );
+      
+      // Wait for the upload to complete
+      await uploadTask;
+      const downloadURL = await getDownloadURL(fileRef);
+      return downloadURL;
+    } else {
+      // Fall back to the old method if no progress callback
+      await uploadBytes(fileRef, file);
+      const downloadURL = await getDownloadURL(fileRef);
+      return downloadURL;
+    }
   } catch (error) {
     console.error("Error uploading video: ", error);
     throw error;

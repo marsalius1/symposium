@@ -29,8 +29,7 @@ const ContentViewer = ({ content, depthLevel }) => {
   };
   
   const currentLevelContent = getCurrentLevelContent();
-  const isVideo = currentLevelContent.video || 
-    (depthLevel === 'full' && content.full.primaryContent.video);
+  const isVideo = currentLevelContent?.video;
   
   // Helper to render the content text for the selected depth level
   const renderText = () => {
@@ -78,7 +77,7 @@ const ContentViewer = ({ content, depthLevel }) => {
             
             {/* Main full content */}
             <div className="mb-6">
-              <p>{content.full.primaryContent.text}</p>
+              <p>{content.full.text}</p>
             </div>
             
             {/* Sections */}
@@ -136,12 +135,10 @@ const ContentViewer = ({ content, depthLevel }) => {
   
   // Helper to render video content
   const renderVideo = () => {
-    let videoUrl;
+    let videoUrl = currentLevelContent?.video;
     
-    if (depthLevel === 'full' && content.full.primaryContent.video) {
-      videoUrl = content.full.primaryContent.video;
-    } else {
-      videoUrl = currentLevelContent.video;
+    if (!videoUrl) {
+      return <div className="p-6 text-center">Video content unavailable</div>;
     }
     
     return (
