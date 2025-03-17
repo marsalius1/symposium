@@ -24,6 +24,7 @@ export const initialContentState = {
     text: '',
     visuals: [],
     keyPoints: [''],
+    references: [],
     duration: 0,
   },
   
