@@ -3040,49 +3040,7 @@ const EnhancedForYouPage = () => {
           </div>
         </div>
       </div>
-      
-      {/* Initial swipe instruction overlay */}
-      <div 
-        className="fixed inset-0 flex items-center justify-center pointer-events-none z-50"
-        style={{ 
-          background: 'rgba(0, 0, 0, 0.7)',
-          opacity: 0.9,
-          animation: 'fadeOut 2s forwards 3s'
-        }}
-      >
-        <div className="text-center px-4 max-w-md">
-          <div
-            className="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center"
-            style={{ background: colors.surface1 }}
-          >
-            <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke={colors.accent1}>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
-            </svg>
-          </div>
-          <h3 className="text-xl font-bold mb-2">Explore in Depth</h3>
-          <p className="mb-8 text-sm opacity-80">
-            Swipe left or tap the screen to dive deeper into content.
-            Swipe up for the next post.
-          </p>
-          <div className="flex justify-center items-center space-x-12">
-            <div className="flex flex-col items-center">
-              <div className="text-sm mb-2" style={{ color: colors.accent2 }}>Swipe left</div>
-              <svg width="40" height="20" viewBox="0 0 40 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 10H37M37 10L30 3M37 10L30 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <div className="text-xs mt-2 opacity-60">Deeper content</div>
-            </div>
-            
-            <div className="flex flex-col items-center">
-              <div className="text-sm mb-2" style={{ color: colors.accent2 }}>Swipe up</div>
-              <svg width="20" height="40" viewBox="0 0 20 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 37V3M10 3L3 10M10 3L17 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <div className="text-xs mt-2 opacity-60">Next post</div>
-            </div>
-          </div>
-        </div>
-      </div>
+    
       
       {/* CSS Animations */}
       <style jsx>{`
