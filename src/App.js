@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import ForYouPage from './pages/ForYouPage';
 import UploadPage from './pages/UploadPage';
-
+import ExperimentalPage from './pages/Experimental';
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -64,6 +64,7 @@ function App() {
         <Routes>
           <Route path="/" element={<ForYouPage />} />
           <Route path="/upload" element={<UploadPage />} />
+          <Route path="/experimental" element={<ExperimentalPage />} />
         </Routes>
       </div>
     </div>
